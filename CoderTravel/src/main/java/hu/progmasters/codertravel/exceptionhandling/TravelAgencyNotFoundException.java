@@ -5,6 +5,6 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UserNotFoundException extends RuntimeException {
-    private final Integer userId;
+public class TravelAgencyNotFoundException extends RuntimeException {
+    private final Integer travelAgencyId;
 }

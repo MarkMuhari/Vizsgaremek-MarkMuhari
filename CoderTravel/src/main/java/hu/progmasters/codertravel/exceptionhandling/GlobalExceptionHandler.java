@@ -22,17 +22,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<List<ValidationError>> handleUserNotFound(UserNotFoundException exception) {
-        ValidationError validationError = new ValidationError("userId",
-                "User with id: " + exception.getUserId() + " is not found!");
-        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(LocationNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleLocationNotFound(LocationNotFoundException exception) {
         ValidationError validationError = new ValidationError("locationId",
-                "User with id: " + exception.getLocationId() + " is not found!");
+                "Location with id: " + exception.getLocationId() + " is not found!");
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DestinationNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handleDestinationNotFound(DestinationNotFoundException exception) {
+        ValidationError validationError = new ValidationError("destinationId",
+                "Destination with id: " + exception.getDestinationId() + " is not found!");
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TravelAgencyNotFoundException.class)
+    public ResponseEntity<List<ValidationError>> handleTravelAgencyNotFound(TravelAgencyNotFoundException exception) {
+        ValidationError validationError = new ValidationError("travelAgencyId",
+                "Travel Agency with id: " + exception.getTravelAgencyId() + " is not found!");
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 }

@@ -3,15 +3,14 @@ package hu.progmasters.codertravel.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
-public class UserInfo {
+public class TravelAgencyCreateCommand {
 
-    private Integer id;
-
+    @NotBlank
     private String name;
 
-    private String email;
-
-    private String password;
+    private Integer locationID;
 }

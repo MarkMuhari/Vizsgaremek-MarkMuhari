@@ -17,5 +17,7 @@ public class DestinationInfo {
     private int pricePerDay;
 
     private LocationInfo locationInfo;
+
+    private TravelAgencyInfo agencyInfo;
 }
 

@@ -3,20 +3,19 @@ package hu.progmasters.codertravel.controller;
 import hu.progmasters.codertravel.dto.LocationCreateCommand;
 import hu.progmasters.codertravel.dto.LocationInfo;
 import hu.progmasters.codertravel.service.LocationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/locations")
 public class LocationController {
 
+    @Autowired
     private LocationService locationService;
-
-    public LocationController(LocationService locationService) {
-        this.locationService = locationService;
-    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -32,19 +31,13 @@ public class LocationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LocationInfo createLocation(@RequestBody LocationCreateCommand createCommand) {
+    public LocationInfo createLocation(@RequestBody @Valid LocationCreateCommand createCommand) {
         return locationService.saveLocation(createCommand);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public LocationInfo updateLocation(@RequestBody LocationCreateCommand updateCommand) {
-        return locationService.updateLocation(updateCommand);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteLocation(@PathVariable("id") Integer id) {
-        locationService.deleteLocation(id);
+    public LocationInfo modifyLocation(@PathVariable("id") Integer id, @RequestBody LocationCreateCommand updateCommand) {
+        return locationService.updateLocation(id, updateCommand);
     }
 }

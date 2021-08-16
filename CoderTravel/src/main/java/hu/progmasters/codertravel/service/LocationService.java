@@ -25,42 +25,36 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    public LocationInfo saveLocation(LocationCreateCommand createCommand) {
-        Location toSave = mapper.map(createCommand, Location.class);
-        Location saved = locationRepository.save(toSave);
-        return mapper.map(saved, LocationInfo.class);
-    }
-
-    public LocationInfo updateLocation(LocationCreateCommand updateCommand) {
-        Location toUpdate = mapper.map(updateCommand, Location.class);
-        if (!locationRepository.existsById(toUpdate.getId())) {
-            throw new LocationNotFoundException(toUpdate.getId());
-        } else {
-            Location updated = locationRepository.save(toUpdate);
-            return mapper.map(updated, LocationInfo.class);
-        }
-    }
-
-    public LocationInfo findLocationById(Integer id) {
-        Optional<Location> searchedLocation = locationRepository.findById(id);
-        if (searchedLocation.isEmpty()) {
-            throw new LocationNotFoundException(id);
-        } else {
-            return mapper.map(searchedLocation.get(), LocationInfo.class);
-        }
-    }
-
     public List<LocationInfo> findAllLocations() {
         return locationRepository.findAll().stream()
                 .map(location -> mapper.map(location, LocationInfo.class))
                 .collect(Collectors.toList());
     }
 
-    public void deleteLocation(Integer id) {
-        if (!locationRepository.existsById(id)) {
+    public LocationInfo findLocationById(Integer id) {
+        Optional<Location> searched = locationRepository.findById(id);
+        if (searched.isEmpty()) {
             throw new LocationNotFoundException(id);
         } else {
-            locationRepository.deleteById(id);
+            return mapper.map(searched.get(), LocationInfo.class);
+        }
+    }
+
+    public LocationInfo saveLocation(LocationCreateCommand createCommand) {
+        Location toSave = mapper.map(createCommand, Location.class);
+        Location saved = locationRepository.save(toSave);
+        return mapper.map(saved, LocationInfo.class);
+    }
+
+    public LocationInfo updateLocation(Integer id, LocationCreateCommand updateCommand) {
+        Optional<Location> searched = locationRepository.findById(id);
+        if (searched.isEmpty()) {
+            throw new LocationNotFoundException(id);
+        } else {
+            Location toUpdate = mapper.map(updateCommand, Location.class);
+            toUpdate.setId(id);
+            Location updated = locationRepository.save(toUpdate);
+            return mapper.map(updated, LocationInfo.class);
         }
     }
 }

@@ -1,6 +1,5 @@
 package hu.progmasters.codertravel;
 
-import hu.progmasters.codertravel.service.InitDbService;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

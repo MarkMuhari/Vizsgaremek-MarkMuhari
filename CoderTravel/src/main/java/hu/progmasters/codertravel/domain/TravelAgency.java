@@ -16,9 +16,11 @@ public class TravelAgency {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "agency")
+    @OneToMany(mappedBy = "travelAgency")
     private List<Destination> destinations;
+
+    @OneToOne
+    private Location location;
 }

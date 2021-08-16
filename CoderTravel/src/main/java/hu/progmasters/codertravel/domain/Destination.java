@@ -25,6 +25,6 @@ public class Destination {
     private Location location;
 
     @ManyToOne
-    private TravelAgency agency;
+    private TravelAgency travelAgency;
 }
 
