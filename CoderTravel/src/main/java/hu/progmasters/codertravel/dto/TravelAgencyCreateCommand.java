@@ -13,7 +13,6 @@ import javax.validation.constraints.NotNull;
 public class TravelAgencyCreateCommand {
 
     @NotBlank(message = "Travel Agency name must not be blank!")
-    @Max(value = 20, message = "Travel Agency must be max 20 characters.")
     @Schema(description = "Travel Agency name.", example = "Coder Traveler")
     private String name;
 

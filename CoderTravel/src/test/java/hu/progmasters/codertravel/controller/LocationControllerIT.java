@@ -1,65 +1,107 @@
 package hu.progmasters.codertravel.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import hu.progmasters.codertravel.exceptionhandling.LocationNotFoundException;
+import hu.progmasters.codertravel.dto.LocationCreateCommand;
+import hu.progmasters.codertravel.dto.LocationInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class LocationControllerIT {
 
-    @Autowired
-    MockMvc mockMvc;
 
-    @Autowired
-    ObjectMapper objectMapper;
-
+    private static LocationCreateCommand createCommand;
+    private static LocationCreateCommand createCommandNotValid;
+    private static LocationCreateCommand updateCommand;
+    private static LocationInfo locationInfo;
+    private static LocationInfo locationInfoAfterUpdate;
     private final String URI_PATH = "/api/locations";
+
+    @Autowired
+    WebTestClient webTestClient;
 
     @BeforeEach
     void setUp() {
+        ModelMapper modelMapper = new ModelMapper();
+        createData(modelMapper);
     }
 
     @Test
-    void findAllLocations() {
+    void test_FindAllLocations() throws Exception {
+        test_CreateLocation();
+        webTestClient.get().uri(URI_PATH)
+                .exchange().expectStatus().isOk();
+        webTestClient.get().uri(URI_PATH)
+                .exchange().expectBody().jsonPath(locationInfo.toString());
     }
 
     @Test
-    void test_findAllLocationsWithEmptyList() throws Exception {
-        mockMvc.perform(get(URI_PATH))
-                .andExpect((status().isOk()))
-                .andExpect(content().json("[]"));
-
+    void test_FindAllLocationsWithEmptyList() throws Exception {
+        webTestClient.get().uri(URI_PATH)
+                .exchange().expectBody().json("[]");
     }
 
     @Test
     void test_findLocationById_ThrowException() throws Exception {
-        mockMvc.perform(get(URI_PATH+"/10"))
-                .andExpect(status().isBadRequest());
-//        assertThrows(() -> LocationNotFoundException.class);
+        webTestClient.get().uri(URI_PATH + "/10")
+                .exchange().expectStatus().isBadRequest();
     }
 
     @Test
-    void createLocation() {
+    void test_CreateLocation() throws Exception {
+        webTestClient.post().uri(URI_PATH)
+                .bodyValue(createCommand).exchange().expectStatus().isCreated();
     }
 
     @Test
-    void modifyLocation() {
+    void test_CreateLocation_WithValidError() throws Exception {
+        webTestClient.post().uri(URI_PATH)
+                .bodyValue(createCommandNotValid).exchange().expectStatus().isBadRequest();
+
+    }
+
+    @Test
+    void test_ModifyLocation() throws Exception {
+        test_CreateLocation();
+        webTestClient.put().uri(URI_PATH + "/1")
+                .bodyValue(updateCommand).exchange().expectStatus().isOk();
+
+        webTestClient.get().uri(URI_PATH + "/1")
+                .exchange().expectBody().jsonPath(locationInfoAfterUpdate.toString());
+    }
+
+    private void createData(ModelMapper modelMapper) {
+        createCommand = new LocationCreateCommand();
+        createCommand.setIso("HUN");
+        createCommand.setCountry("Hungary");
+        createCommand.setCity("Budapest");
+        createCommand.setStreetAndNumber("Lenkey u. 7.");
+
+        createCommandNotValid = new LocationCreateCommand();
+        createCommandNotValid.setIso(" ");
+        createCommandNotValid.setCountry("Hungary");
+        createCommandNotValid.setCity("Budapest");
+        createCommandNotValid.setStreetAndNumber("Lenkey u. 7.");
+
+        locationInfo = modelMapper.map(createCommand, LocationInfo.class);
+        locationInfo.setId(1);
+
+        updateCommand = new LocationCreateCommand();
+        updateCommand.setIso("HUN");
+        updateCommand.setCountry("Hungary");
+        updateCommand.setCity("Debrecen");
+        updateCommand.setStreetAndNumber("Móka utca 7.");
+
+        locationInfoAfterUpdate = modelMapper.map(updateCommand, LocationInfo.class);
+        locationInfoAfterUpdate.setId(1);
     }
 }

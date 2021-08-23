@@ -16,25 +16,33 @@ class DestinationControllerIT {
 
     @BeforeEach
     void setUp() {
+
     }
 
     @Test
-    void findAllDestinations() {
+    void test_FindAllDestinations() {
+
     }
 
     @Test
-    void findDestinationById() {
+    void test_FindDestinationById() {
+
     }
 
     @Test
-    void createDestination() {
+    void test_CreateDestination() {
+
     }
 
     @Test
-    void modifyDestination() {
+    void test_ModifyDestination() {
+
     }
 
     @Test
-    void deleteDestination() {
+    void test_DeleteDestination() {
+
     }
+
+
 }

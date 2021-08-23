@@ -15,12 +15,10 @@ import javax.validation.constraints.Positive;
 public class DestinationCreateCommand {
 
     @NotBlank(message = "Title must not be blank!")
-    @Max(value = 100, message = "Travel Agency must be max 100 characters.")
     @Schema(description = "Destination main title", example = "Budapest Aug 20")
     private String title;
 
     @NotBlank(message = "Description must not be blank!")
-    @Max(value = 200, message = "Travel Agency must be max 200 characters.")
     @Schema(description = "Destination of purpose",
             example = "Very nice city and interesting programs are waiting for you.")
     private String description;
