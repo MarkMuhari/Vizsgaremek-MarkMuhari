@@ -67,15 +67,8 @@ class TravelAgencyServiceTest {
 
     @Test
     void saveTravelAgency() {
-//        when(agencyRepository.save(agency)).thenReturn(agencyAfterSave);
         when(locationRepository.save(locationSaved)).thenReturn(locationAfterSaved);
         assertEquals(1, locationAfterSaved.getId());
-        Location Location = locationRepository.save(locationSaved);
-        when(locationRepository.save(locationSaved)).thenReturn(locationAfterSaved);
-        LocationInfo saveLocationInfo = locationService.saveLocation(locationCreateCommand);
-        TravelAgencyInfo saved = new TravelAgencyInfo();
-        saved.setLocationInfo(saveLocationInfo);
-        saved = agencyService.saveTravelAgency(travelAgencyCreateCommand);
 
     }
 

@@ -4,6 +4,7 @@ import hu.progmasters.codertravel.domain.Destination;
 import hu.progmasters.codertravel.domain.Location;
 import hu.progmasters.codertravel.dto.*;
 import hu.progmasters.codertravel.exceptionhandling.DestinationNotFoundException;
+import hu.progmasters.codertravel.exceptionhandling.LocationNotFoundException;
 import hu.progmasters.codertravel.repository.DestinationRepository;
 import hu.progmasters.codertravel.repository.LocationRepository;
 import hu.progmasters.codertravel.repository.TravelAgencyRepository;
@@ -31,8 +32,9 @@ class DestinationServiceTest {
     TravelAgencyRepository agencyRepository = mock(TravelAgencyRepository.class);
     @Autowired
     ModelMapper modelMapper = new ModelMapper();
-    DestinationService destinationService = new DestinationService(destinationRepository, locationRepository,
-            agencyRepository, modelMapper);
+
+    LocationService locationService = mock(LocationService.class);
+    DestinationService destinationService;
 
     private static Destination destination;
     private static Destination destinationAfterSave;
@@ -47,8 +49,15 @@ class DestinationServiceTest {
 
     @BeforeEach
     void setUp() {
+        destinationService = new DestinationService(destinationRepository, locationRepository,
+                agencyRepository, modelMapper);
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         createData(modelMapper);
+        locationInfo = modelMapper.map(locationCreateCommand, LocationInfo.class);
+        locationInfo.setId(1);
+        locationInfo = locationService.saveLocation(locationCreateCommand);
+        locationRepository.save(location);
+
     }
 
     @Test
@@ -73,12 +82,19 @@ class DestinationServiceTest {
     }
 
     @Test
-    void saveDestination() {
+    void test_SaveDestination_WithLocationNotFoundException() {
         when(destinationRepository.save(destination)).thenReturn(destinationAfterSave);
         when(locationRepository.save(location)).thenReturn(locationAfterSave);
-        locationRepository.save(location);
-        LocationInfo savedLocation = modelMapper.map(locationRepository.save(location), LocationInfo.class);
-        savedLocation.setId(1);
+        when(locationService.saveLocation(locationCreateCommand)).thenReturn(locationInfo);
+        assertThrows(LocationNotFoundException.class, () -> destinationService.saveDestination(destinationCreateCommand));
+    }
+
+     @Test
+    void test_SaveDestination() {
+        when(destinationRepository.save(destination)).thenReturn(destinationAfterSave);
+        when(locationRepository.save(location)).thenReturn(locationAfterSave);
+        when(locationService.saveLocation(locationCreateCommand)).thenReturn(locationInfo);
+
         DestinationInfo saved = destinationService.saveDestination(destinationCreateCommand);
 
     }
@@ -128,6 +144,7 @@ class DestinationServiceTest {
 
         locationInfo = modelMapper.map(locationCreateCommand, LocationInfo.class);
         locationInfo.setId(1);
+        locationInfo = locationService.saveLocation(locationCreateCommand);
 
         agencyDestinationInfo = new TravelAgencyDestinationInfo();
         agencyDestinationInfo.setName("otp travel");
