@@ -78,11 +78,11 @@ class TravelAgencyControllerIT {
 
     private void createData(ModelMapper modelMapper) {
         createCommand = new TravelAgencyCreateCommand();
-        createCommand.setLocationID(1);
+        createCommand.setLocationId(1);
         createCommand.setName("Travel Agency");
 
         updateCommand = new TravelAgencyCreateCommand();
-        updateCommand.setLocationID(1);
+        updateCommand.setLocationId(1);
         updateCommand.setName("Otp Travel");
 
         DestinationInfo destinationInfo = new DestinationInfo();

@@ -12,7 +12,6 @@ public class CoderTravelApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CoderTravelApplication.class, args);
-        System.out.println("Elindult");
     }
 
     @Bean

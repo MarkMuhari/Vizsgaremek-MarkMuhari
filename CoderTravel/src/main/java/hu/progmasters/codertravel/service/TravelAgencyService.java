@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class TravelAgencyService {
 
-    private TravelAgencyRepository agencyRepository;
-    private LocationRepository locationRepository;
-    private ModelMapper mapper;
+    private final TravelAgencyRepository agencyRepository;
+    private final LocationRepository locationRepository;
+    private final ModelMapper mapper;
 
     @Value("${coderTravel.fixLetterCase}")
     private boolean fixLetterCase;
@@ -70,10 +70,10 @@ public class TravelAgencyService {
     public TravelAgencyInfo saveTravelAgency(TravelAgencyCreateCommand createCommand) {
 
         TravelAgency toSave = mapper.map(createCommand, TravelAgency.class);
-        Optional<Location> locationById = locationRepository.findById(createCommand.getLocationID());
+        Optional<Location> locationById = locationRepository.findById(createCommand.getLocationId());
 
         if (locationById.isEmpty()) {
-            throw new LocationNotFoundException(createCommand.getLocationID());
+            throw new LocationNotFoundException(createCommand.getLocationId());
         } else {
             toSave.setLocation(locationById.get());
             LocationInfo resultInfo = mapper.map(locationById.get(), LocationInfo.class);
@@ -103,13 +103,13 @@ public class TravelAgencyService {
 
     public TravelAgencyInfo updateTravelAgency(Integer id, TravelAgencyCreateCommand updateCommand) {
         Optional<TravelAgency> searched = agencyRepository.findById(id);
-        Optional<Location> locationById = locationRepository.findById(updateCommand.getLocationID());
+        Optional<Location> locationById = locationRepository.findById(updateCommand.getLocationId());
 
         if (searched.isEmpty()) {
             throw new TravelAgencyNotFoundException(id);
         } else {
             if (locationById.isEmpty()) {
-                throw new LocationNotFoundException(updateCommand.getLocationID());
+                throw new LocationNotFoundException(updateCommand.getLocationId());
             } else {
 
                 TravelAgency toUpdate = mapper.map(updateCommand, TravelAgency.class);

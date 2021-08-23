@@ -1,6 +1,8 @@
 package hu.progmasters.codertravel.controller;
 
-import hu.progmasters.codertravel.dto.*;
+import hu.progmasters.codertravel.dto.DestinationCreateCommand;
+import hu.progmasters.codertravel.dto.LocationCreateCommand;
+import hu.progmasters.codertravel.dto.TravelAgencyCreateCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -24,12 +26,9 @@ class DestinationControllerIT {
     private final String URI_LOCATION_PATH = "/api/locations";
     private final String URI_AGENCY_PATH = "/api/travelagencies";
 
-    private static LocationDestinationInfo locationDestinationInfo;
-    private static TravelAgencyDestinationInfo agencyDestinationInfo;
     private static DestinationCreateCommand createCommand;
     private static DestinationCreateCommand updateCommand;
     private static DestinationCreateCommand createCommandNotValid;
-    private static DestinationInfo destinationInfo;
     private static LocationCreateCommand createCommandLocation;
     private static TravelAgencyCreateCommand createCommandAgency;
 
@@ -122,19 +121,8 @@ class DestinationControllerIT {
         createCommandLocation.setStreetAndNumber("Lenkey u. 7.");
 
         createCommandAgency = new TravelAgencyCreateCommand();
-        createCommandAgency.setLocationID(1);
+        createCommandAgency.setLocationId(1);
         createCommandAgency.setName("Travel Agency");
-
-//        locationDestinationInfo = new LocationDestinationInfo();
-//        locationDestinationInfo.setCity("Budapest");
-//        locationDestinationInfo.setCountry("Hungary");
-//        locationDestinationInfo.setStreetAndNumber("Lenkey utca 7.");
-//
-//
-//        agencyDestinationInfo = new TravelAgencyDestinationInfo();
-//        agencyDestinationInfo.setId(1);
-//        agencyDestinationInfo.setName("Otp Travel");
-
 
     }
 }

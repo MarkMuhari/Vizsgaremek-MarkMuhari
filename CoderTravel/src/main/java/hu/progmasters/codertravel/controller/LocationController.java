@@ -24,7 +24,7 @@ import java.util.List;
 @RequestMapping("/api/locations")
 public class LocationController {
 
-    private LocationService locationService;
+    private final LocationService locationService;
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationController.class);
     private static final LogCommand logCommand = new LogCommand();
 
@@ -41,9 +41,8 @@ public class LocationController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<LocationInfo> findAllLocations() {
-        List<LocationInfo> allLocations = locationService.findAllLocations();
-        LOGGER.info(logCommand.getLOG_OK(), allLocations);
-        return allLocations;
+        LOGGER.info(logCommand.getLOG_OK());
+        return locationService.findAllLocations();
     }
 
     @Operation(summary = "Find a Location by id")
@@ -63,9 +62,9 @@ public class LocationController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public LocationInfo findLocationById(@PathVariable("id") Integer id) {
-        LocationInfo locationById = locationService.findLocationById(id);
-        LOGGER.info(logCommand.getLOG_OK(), locationById);
-        return locationById;
+
+        LOGGER.info(logCommand.getLOG_OK());
+        return locationService.findLocationById(id);
     }
 
 
@@ -111,8 +110,7 @@ public class LocationController {
     @ResponseStatus(HttpStatus.OK)
     public LocationInfo modifyLocation(@PathVariable("id") Integer id,
                                        @RequestBody @Valid LocationCreateCommand updateCommand) {
-        LocationInfo locationInfo = locationService.updateLocation(id, updateCommand);
-        LOGGER.info(logCommand.getLOG_OK(), locationInfo);
-        return locationInfo;
+        LOGGER.info(logCommand.getLOG_OK());
+        return locationService.updateLocation(id, updateCommand);
     }
 }

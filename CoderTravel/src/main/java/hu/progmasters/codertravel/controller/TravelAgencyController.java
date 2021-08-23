@@ -23,7 +23,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/travelagencies")
 public class TravelAgencyController {
 
-    private TravelAgencyService agencyService;
+    private final TravelAgencyService agencyService;
     private static final Logger LOGGER = LoggerFactory.getLogger(TravelAgencyController.class);
     private static final LogCommand logCommand = new LogCommand();
 
@@ -49,9 +49,8 @@ public class TravelAgencyController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TravelAgencyInfo findTravelAgencyById(@PathVariable("id") Integer id) {
-        TravelAgencyInfo travelAgencyById = agencyService.findTravelAgencyById(id);
-        LOGGER.info(logCommand.getLOG_OK(), travelAgencyById);
-        return travelAgencyById;
+        LOGGER.info(logCommand.getLOG_OK(), id);
+        return agencyService.findTravelAgencyById(id);
     }
 
     @Operation(summary = "Create a new Travel agency")
@@ -98,8 +97,7 @@ public class TravelAgencyController {
     @ResponseStatus(HttpStatus.OK)
     public TravelAgencyInfo modifyTravelAgency(@PathVariable("id") Integer id,
                                                @RequestBody @Valid TravelAgencyCreateCommand updateCommand) {
-        TravelAgencyInfo travelAgencyInfo = agencyService.updateTravelAgency(id, updateCommand);
-        LOGGER.info(logCommand.getLOG_OK(), travelAgencyInfo);
-        return travelAgencyInfo;
+        LOGGER.info(logCommand.getLOG_OK(), updateCommand);
+        return agencyService.updateTravelAgency(id, updateCommand);
     }
 }

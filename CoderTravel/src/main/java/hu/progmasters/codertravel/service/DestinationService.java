@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 @Transactional
 public class DestinationService {
 
-    private DestinationRepository destinationRepository;
-    private LocationRepository locationRepository;
-    private TravelAgencyRepository agencyRepository;
-    private ModelMapper mapper;
+    private final DestinationRepository destinationRepository;
+    private final LocationRepository locationRepository;
+    private final TravelAgencyRepository agencyRepository;
+    private final ModelMapper mapper;
 
     public DestinationService(DestinationRepository destinationRepository, LocationRepository locationRepository, TravelAgencyRepository agencyRepository, ModelMapper mapper) {
         this.destinationRepository = destinationRepository;
@@ -82,12 +82,18 @@ public class DestinationService {
         return result;
     }
 
-
     public DestinationInfo updateDestination(Integer id, DestinationCreateCommand updateCommand) {
         Optional<Destination> searched = destinationRepository.findById(id);
 
         return getDestinationInfo(id, updateCommand, searched);
 
+    }
+
+    public void removeDestination(Integer id) {
+        if (!destinationRepository.existsById(id)) {
+            throw new DestinationNotFoundException(id);
+        }
+        destinationRepository.delete(destinationRepository.getById(id));
     }
 
     private DestinationInfo getDestinationInfo(Integer id, DestinationCreateCommand updateCommand, Optional<Destination> searched) {
@@ -107,13 +113,6 @@ public class DestinationService {
         } else {
             throw new DestinationNotFoundException(id);
         }
-    }
-
-    public void removeDestination(Integer id) {
-        if (!destinationRepository.existsById(id)) {
-            throw new DestinationNotFoundException(id);
-        }
-        destinationRepository.delete(destinationRepository.getById(id));
     }
 
     private void configurationToSave(DestinationCreateCommand createCommand, Destination toSave) {

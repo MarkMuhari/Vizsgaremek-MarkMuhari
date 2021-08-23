@@ -29,9 +29,12 @@ class LocationServiceTest {
     LocationService locationService = new LocationService(locationRepository, modelMapper);
 
     private LocationCreateCommand createCommand;
+    private LocationCreateCommand updateCommand;
     private Location location;
+    private Location locationUpdate;
     private Location locationAfterSave;
     private LocationInfo locationInfo;
+    private LocationInfo locationInfoUpdate;
     private LocationCreateCommand updatedLocationCreateCommand;
     private LocationInfo locationAfterUpdate;
 
@@ -99,19 +102,22 @@ class LocationServiceTest {
 
     @Test
     void test_UpdateLocation() {
-        when(locationRepository.save(location)).thenReturn(locationAfterSave);
-        when(locationRepository.findById(1)).thenReturn(Optional.of(locationAfterSave));
-        LocationInfo locationSaved = locationService.saveLocation(createCommand);
-        System.out.println(locationService.findLocationById(1));
-        LocationInfo locationUpdate = locationService.updateLocation(1, updatedLocationCreateCommand);
-        System.out.println(locationUpdate);
+
     }
 
 
 
     private void createData() {
-        createCommand = createLocationCommand();
+        createCommand = createLocationCommand("HUN","Hungary","Budapest","Lenkey utca7.");
         location = modelMapper.map(createCommand, Location.class);
+
+        updatedLocationCreateCommand = locationUpdatedCreateCommand();
+
+        updateCommand = createLocationCommand("HUN", "Hungary", "Debrecen", "Moka utca 8.");
+        locationUpdate = modelMapper.map(updateCommand, Location.class);
+
+        locationInfoUpdate = modelMapper.map(updateCommand, LocationInfo.class);
+        locationInfoUpdate.setId(1);
 
         locationAfterSave = modelMapper.map(createCommand, Location.class);
         locationAfterSave.setId(1);
@@ -119,18 +125,18 @@ class LocationServiceTest {
         locationInfo = modelMapper.map(createCommand, LocationInfo.class);
         locationInfo.setId(1);
 
-        updatedLocationCreateCommand = locationUpdatedCreateCommand();
+
 
         locationAfterUpdate = locationAfterUpdate();
     }
 
-    private LocationCreateCommand createLocationCommand() {
-        createCommand = new LocationCreateCommand();
-        createCommand.setIso("HUN");
-        createCommand.setCountry("Hungary");
-        createCommand.setCity("Budapest");
-        createCommand.setStreetAndNumber("Lenkey utca 7.");
-        return createCommand;
+    private LocationCreateCommand createLocationCommand(String iso, String country, String city, String street) {
+        LocationCreateCommand result = new LocationCreateCommand();
+        result.setIso(iso);
+        result.setCountry(country);
+        result.setCity(city);
+        result.setStreetAndNumber(street);
+        return result;
     }
 
     private LocationCreateCommand locationUpdatedCreateCommand() {
