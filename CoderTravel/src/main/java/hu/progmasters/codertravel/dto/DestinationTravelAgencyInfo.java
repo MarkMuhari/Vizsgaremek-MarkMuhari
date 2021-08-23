@@ -3,10 +3,9 @@ package hu.progmasters.codertravel.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
-public class DestinationInfo {
+public class DestinationTravelAgencyInfo {
 
     private Integer id;
 
@@ -18,6 +17,5 @@ public class DestinationInfo {
 
     private LocationDestinationInfo locationDestinationInfo;
 
-    private TravelAgencyDestinationInfo agencyInfo;
+    private TravelAgencyDestinationInfo agencyDestinationInfo;
 }
-

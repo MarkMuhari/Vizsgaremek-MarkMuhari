@@ -3,8 +3,8 @@ package hu.progmasters.codertravel.service;
 import hu.progmasters.codertravel.domain.Destination;
 import hu.progmasters.codertravel.dto.DestinationCreateCommand;
 import hu.progmasters.codertravel.dto.DestinationInfo;
-import hu.progmasters.codertravel.dto.LocationInfo;
-import hu.progmasters.codertravel.dto.TravelAgencyInfo;
+import hu.progmasters.codertravel.dto.LocationDestinationInfo;
+import hu.progmasters.codertravel.dto.TravelAgencyDestinationInfo;
 import hu.progmasters.codertravel.exceptionhandling.DestinationNotFoundException;
 import hu.progmasters.codertravel.exceptionhandling.LocationNotFoundException;
 import hu.progmasters.codertravel.exceptionhandling.TravelAgencyNotFoundException;
@@ -37,7 +37,8 @@ public class DestinationService {
 
 
     public List<DestinationInfo> findAllDestinations() {
-        return destinationRepository.findAll().stream()
+        List<Destination> resultDestinations = destinationRepository.findAll();
+        return resultDestinations.stream()
                 .map(destination -> mapper.map(destination, DestinationInfo.class))
                 .collect(Collectors.toList());
     }
@@ -72,13 +73,10 @@ public class DestinationService {
         saved.getTravelAgency().getDestinations().add(saved);
 
         DestinationInfo result = mapper.map(saved, DestinationInfo.class);
-        LocationInfo resultLocation = mapper.map(toSave.getLocation(), LocationInfo.class);
-        result.setLocationInfo(resultLocation);
-        TravelAgencyInfo resultAgency = mapper.map(toSave.getTravelAgency(), TravelAgencyInfo.class);
-        resultAgency.setLocationInfo(mapper.map(toSave.getLocation(), LocationInfo.class));
-        resultAgency.setDestinationInfos(toSave.getTravelAgency().getDestinations().stream()
-                .map(destination -> mapper.map(destination, DestinationInfo.class))
-                .collect(Collectors.toList()));
+        LocationDestinationInfo resultLocation = mapper.map(toSave.getLocation(), LocationDestinationInfo.class);
+        result.setLocationDestinationInfo(resultLocation);
+        TravelAgencyDestinationInfo resultAgency = mapper.map(toSave.getTravelAgency(), TravelAgencyDestinationInfo.class);
+
         result.setAgencyInfo(resultAgency);
 
         return result;

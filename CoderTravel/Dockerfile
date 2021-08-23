@@ -1,4 +1,5 @@
 FROM adoptopenjdk:11-jre-hotspot
 RUN mkdir /opt/app
-COPY codertravel/target/coder-travel-1.0-SNAPSHOT.jar /opt/app/coder-travel.jar
-CMD ["java", "-jar", "/opt/app/CoderTravel.jar"]
+COPY target/coder-travel-1.0-SNAPSHOT.jar /opt/app/coder-travel.jar
+
+CMD ["java", "-jar", "/opt/app/coder-travel.jar"]

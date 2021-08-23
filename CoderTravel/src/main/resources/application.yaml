@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:mysql://traveldb/travel?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+    username: root
+    password: 1234
 
   jpa:
     hibernate:
@@ -11,7 +11,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: on
-
 
   mvc:
     format:

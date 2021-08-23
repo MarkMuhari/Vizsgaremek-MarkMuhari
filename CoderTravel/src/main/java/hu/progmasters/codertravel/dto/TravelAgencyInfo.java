@@ -14,7 +14,6 @@ public class TravelAgencyInfo {
 
     private Integer id;
 
-    @NotBlank
     private String name;
 
     private LocationInfo locationInfo;

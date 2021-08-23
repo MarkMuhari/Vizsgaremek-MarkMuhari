@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
+@Table(name = "travel_agency")
 public class TravelAgency {
 
     @Id

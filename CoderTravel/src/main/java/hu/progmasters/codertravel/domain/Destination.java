@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
+@Table(name = "destination")
 public class Destination {
 
     @Id
@@ -21,7 +22,8 @@ public class Destination {
 
     private int pricePerDay;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    @ManyToOne
     private Location location;
 
     @ManyToOne

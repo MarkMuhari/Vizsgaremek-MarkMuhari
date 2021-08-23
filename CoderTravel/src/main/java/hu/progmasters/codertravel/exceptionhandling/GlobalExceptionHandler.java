@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final String ISNOTFOUND = " is not found!";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ValidationError>> handleValidationException(MethodArgumentNotValidException exception) {
@@ -25,21 +26,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(LocationNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleLocationNotFound(LocationNotFoundException exception) {
         ValidationError validationError = new ValidationError("locationId",
-                "Location with id: " + exception.getLocationId() + " is not found!");
+                "Location with id: " + exception.getLocationId() + ISNOTFOUND);
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DestinationNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleDestinationNotFound(DestinationNotFoundException exception) {
         ValidationError validationError = new ValidationError("destinationId",
-                "Destination with id: " + exception.getDestinationId() + " is not found!");
+                "Destination with id: " + exception.getDestinationId() + ISNOTFOUND);
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(TravelAgencyNotFoundException.class)
     public ResponseEntity<List<ValidationError>> handleTravelAgencyNotFound(TravelAgencyNotFoundException exception) {
         ValidationError validationError = new ValidationError("travelAgencyId",
-                "Travel Agency with id: " + exception.getTravelAgencyId() + " is not found!");
+                "Travel Agency with id: " + exception.getTravelAgencyId() + ISNOTFOUND);
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
 }

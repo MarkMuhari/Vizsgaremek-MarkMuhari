@@ -1,11 +1,9 @@
 package hu.progmasters.codertravel.service;
 
+import hu.progmasters.codertravel.domain.Destination;
 import hu.progmasters.codertravel.domain.Location;
 import hu.progmasters.codertravel.domain.TravelAgency;
-import hu.progmasters.codertravel.dto.DestinationInfo;
-import hu.progmasters.codertravel.dto.LocationInfo;
-import hu.progmasters.codertravel.dto.TravelAgencyCreateCommand;
-import hu.progmasters.codertravel.dto.TravelAgencyInfo;
+import hu.progmasters.codertravel.dto.*;
 import hu.progmasters.codertravel.exceptionhandling.LocationNotFoundException;
 import hu.progmasters.codertravel.exceptionhandling.TravelAgencyNotFoundException;
 import hu.progmasters.codertravel.repository.LocationRepository;
@@ -40,15 +38,29 @@ public class TravelAgencyService {
 
     public TravelAgencyInfo findTravelAgencyById(Integer id) {
         Optional<TravelAgency> searched = agencyRepository.findById(id);
+
         if (searched.isEmpty()) {
             throw new TravelAgencyNotFoundException(id);
         } else {
+
             TravelAgencyInfo result = mapper.map(searched.get(), TravelAgencyInfo.class);
+
             LocationInfo resultLocationInfo = mapper.map(searched.get().getLocation(), LocationInfo.class);
+
             result.setLocationInfo(resultLocationInfo);
-            List<DestinationInfo> resultDestinations = searched.get().getDestinations().stream()
-                    .map(destination -> mapper.map(destination, DestinationInfo.class))
-                    .collect(Collectors.toList());
+
+            List<DestinationInfo> resultDestinations = new ArrayList<>();
+            for (Destination destination : searched.get().getDestinations()) {
+                DestinationInfo destinationInfo = mapper.map(destination,
+                        DestinationInfo.class);
+                LocationDestinationInfo locationDestinationInfo = mapper.map(destination.getLocation(),
+                        LocationDestinationInfo.class);
+                TravelAgencyDestinationInfo agencyDestinationInfo = mapper.map(destination.getTravelAgency(),
+                        TravelAgencyDestinationInfo.class);
+                destinationInfo.setAgencyInfo(agencyDestinationInfo);
+                destinationInfo.setLocationDestinationInfo(locationDestinationInfo);
+                resultDestinations.add(destinationInfo);
+            }
             result.setDestinationInfos(resultDestinations);
 
             return result;
@@ -127,6 +139,7 @@ public class TravelAgencyService {
             }
         }
     }
+
 
     private String fixLetterCharacters(String travelName) {
         String[] agencyNamesplit = travelName.split(" ");
