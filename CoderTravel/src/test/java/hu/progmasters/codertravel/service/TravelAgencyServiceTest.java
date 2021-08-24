@@ -15,15 +15,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TravelAgencyServiceTest {
@@ -33,7 +31,6 @@ class TravelAgencyServiceTest {
     ModelMapper modelMapper = new ModelMapper();
     LocationRepository locationRepository = mock(LocationRepository.class);
     LocationService locationService = mock(LocationService.class);
-    @MockBean
     TravelAgencyService agencyService = new TravelAgencyService(agencyRepository, locationRepository, modelMapper);
 
 
@@ -69,6 +66,15 @@ class TravelAgencyServiceTest {
     void saveTravelAgency() {
         when(locationRepository.save(locationSaved)).thenReturn(locationAfterSaved);
         assertEquals(1, locationAfterSaved.getId());
+        when(locationService.saveLocation(locationCreateCommand)).thenReturn(locationInfo);
+        locationRepository.save(locationSaved);
+        LocationInfo locationInfo = locationService.saveLocation(locationCreateCommand);
+        System.out.println(locationInfo);
+        verify(locationRepository, times(2)).save(any());
+        verifyNoMoreInteractions(locationRepository);
+        System.out.println(locationService.findAllLocations());
+        System.out.println(locationRepository.findAll());
+
 
     }
 
