@@ -89,15 +89,15 @@ class DestinationServiceTest {
         assertThrows(LocationNotFoundException.class, () -> destinationService.saveDestination(destinationCreateCommand));
     }
 
-     @Test
-    void test_SaveDestination() {
-        when(destinationRepository.save(destination)).thenReturn(destinationAfterSave);
-        when(locationRepository.save(location)).thenReturn(locationAfterSave);
-        when(locationService.saveLocation(locationCreateCommand)).thenReturn(locationInfo);
-
-        DestinationInfo saved = destinationService.saveDestination(destinationCreateCommand);
-
-    }
+//     @Test
+//    void test_SaveDestination() {
+//        when(destinationRepository.save(destination)).thenReturn(destinationAfterSave);
+//        when(locationRepository.save(location)).thenReturn(locationAfterSave);
+//        when(locationService.saveLocation(locationCreateCommand)).thenReturn(locationInfo);
+//
+//        DestinationInfo saved = destinationService.saveDestination(destinationCreateCommand);
+//
+//    }
 //
 //    @Test
 //    void updateDestination() {

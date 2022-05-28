@@ -64,6 +64,7 @@ class LocationServiceTest {
                 .thenReturn(List.of(locationAfterSave));
 
         when(locationRepository.findById(1)).thenReturn(Optional.of(locationAfterSave));
+
         LocationInfo locationInfoFound = locationService.findLocationById(1);
         assertEquals(locationInfo, locationInfoFound);
         assertThat(locationService.findLocationById(1)).isEqualTo(locationInfo);
