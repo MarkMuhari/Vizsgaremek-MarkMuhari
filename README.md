@@ -24,8 +24,8 @@ A vizsgázónak a vizsgát megelőzően egy komplex backend alkalmazást kell le
 
 Az alkalmazásnak az alábbi elvárásoknak kell megfelelni:
 
-    Életszerű, valódi problémára nyújt megoldást.
-    Adattárolási és -kezelési funkciókat is megvalósít.
-    Legalább három rétegből épül fel.
-    Szabványoknak megfelelő API-t tartalmaz megfelelő hibakezeléssel (pl. OpenAPI szabvány alapú REST webszolgáltatás).
-    A forráskódnak a tiszta kód elveinek megfelelően kell készülnie.
+Életszerű, valódi problémára nyújt megoldást.
+Adattárolási és -kezelési funkciókat is megvalósít.
+Legalább három rétegből épül fel.
+Szabványoknak megfelelő API-t tartalmaz megfelelő hibakezeléssel (pl. OpenAPI szabvány alapú REST webszolgáltatás).
+A forráskódnak a tiszta kód elveinek megfelelően kell készülnie.
